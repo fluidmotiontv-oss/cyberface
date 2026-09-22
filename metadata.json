@@ -1,0 +1,10 @@
+{
+  "name": "Cyber Dragon Guardian",
+  "description": "Interactive talking Cyber Dragon VTuber avatar with 60FPS real-time jaw articulation, Gemini AI speech synthesis, 432Hz golden tuning, and Seedance 2.5 cartoon pipeline integration.",
+  "requestFramePermissions": [
+    "microphone"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
