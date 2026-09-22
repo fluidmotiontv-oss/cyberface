@@ -23,6 +23,12 @@ export function PlasmaFxController({
   const coreSize = streamConfig.plasmaCoreSize ?? 1.0;
   const audioReactivity = streamConfig.plasmaAudioReactivity ?? 1.0;
 
+  // Dragon Breath Config
+  const isBreathEnabled = streamConfig.showDragonBreath !== false;
+  const breathIntensity = streamConfig.dragonBreathIntensity ?? 1.0;
+  const breathRoarThresh = streamConfig.dragonBreathRoarThreshold ?? 0.55;
+  const breathAudioGain = streamConfig.dragonBreathAudioSyncGain ?? 1.2;
+
   const presetList: Array<{ id: 'cyan' | 'gold' | 'violet' | 'emerald' | 'supernova'; label: string; bg: string }> = [
     { id: 'cyan', label: 'Quantum Cyan', bg: 'from-cyan-500 to-blue-600' },
     { id: 'gold', label: 'Solar Gold', bg: 'from-amber-400 to-orange-600' },
@@ -210,6 +216,125 @@ export function PlasmaFxController({
             </div>
             <span className="font-mono text-cyan-300 text-[11px]">
               {Math.round((audioState.volume || 0) * 100)}%
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* DRAGON BREATH HOLOGRAPHIC FIRE PARTICLE SYSTEM MODULE */}
+      <div className="p-4 bg-gradient-to-br from-amber-950/30 via-zinc-900 to-orange-950/30 rounded-2xl border border-amber-500/40 flex flex-col gap-4 shadow-xl">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            <div className="p-2 rounded-xl bg-amber-500/20 border border-amber-400 text-amber-300 shadow-lg shadow-amber-500/20">
+              <Flame className="w-5 h-5 text-amber-400 animate-bounce" style={{ animationDuration: '2s' }} />
+            </div>
+            <div>
+              <h4 className="font-orbitron font-extrabold text-xs tracking-wider uppercase text-zinc-100 flex items-center gap-2">
+                <span>DRAGON BREATH PARTICLE SYSTEM</span>
+                <span className="text-[10px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40 font-mono">
+                  HOLOGRAPHIC FIRE
+                </span>
+              </h4>
+              <p className="text-[11px] text-zinc-400 font-mono">
+                Syncs with mic gain & audio reactivity to emit fire density when roaring
+              </p>
+            </div>
+          </div>
+
+          <label className="relative inline-flex items-center cursor-pointer">
+            <input
+              type="checkbox"
+              checked={isBreathEnabled}
+              onChange={(e) => onUpdateStreamConfig({ showDragonBreath: e.target.checked })}
+              className="sr-only peer"
+            />
+            <div className="w-10 h-5 bg-zinc-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-zinc-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-amber-500"></div>
+          </label>
+        </div>
+
+        {/* Dragon Breath Fine Tuning Controls */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          {/* Fire Density Multiplier */}
+          <div className="p-3 bg-zinc-950/80 rounded-xl border border-zinc-800 flex flex-col gap-1.5">
+            <div className="flex justify-between text-[11px]">
+              <span className="text-zinc-300 font-medium">Fire Particle Density</span>
+              <span className="font-mono text-amber-400 font-bold">{breathIntensity.toFixed(1)}x</span>
+            </div>
+            <input
+              type="range"
+              min="0.2"
+              max="3.0"
+              step="0.1"
+              value={breathIntensity}
+              onChange={(e) => onUpdateStreamConfig({ dragonBreathIntensity: parseFloat(e.target.value) })}
+              disabled={!isBreathEnabled}
+              className="w-full accent-amber-400 h-1.5 bg-zinc-800 rounded-lg cursor-pointer disabled:opacity-40"
+            />
+            <span className="text-[10px] text-zinc-500 font-mono">Emitted flame & ember volume</span>
+          </div>
+
+          {/* Audio Reactivity Gain Sync */}
+          <div className="p-3 bg-zinc-950/80 rounded-xl border border-zinc-800 flex flex-col gap-1.5">
+            <div className="flex justify-between text-[11px]">
+              <span className="text-zinc-300 font-medium">Audio Reactivity Gain</span>
+              <span className="font-mono text-amber-400 font-bold">{breathAudioGain.toFixed(1)}x</span>
+            </div>
+            <input
+              type="range"
+              min="0.5"
+              max="3.0"
+              step="0.1"
+              value={breathAudioGain}
+              onChange={(e) => onUpdateStreamConfig({ dragonBreathAudioSyncGain: parseFloat(e.target.value) })}
+              disabled={!isBreathEnabled}
+              className="w-full accent-amber-400 h-1.5 bg-zinc-800 rounded-lg cursor-pointer disabled:opacity-40"
+            />
+            <span className="text-[10px] text-zinc-500 font-mono">Mic volume amplification multiplier</span>
+          </div>
+
+          {/* Roar Trigger Sensitivity */}
+          <div className="p-3 bg-zinc-950/80 rounded-xl border border-zinc-800 flex flex-col gap-1.5">
+            <div className="flex justify-between text-[11px]">
+              <span className="text-zinc-300 font-medium">Roar Fire Threshold</span>
+              <span className="font-mono text-amber-400 font-bold">{Math.round(breathRoarThresh * 100)}%</span>
+            </div>
+            <input
+              type="range"
+              min="0.2"
+              max="0.9"
+              step="0.05"
+              value={breathRoarThresh}
+              onChange={(e) => onUpdateStreamConfig({ dragonBreathRoarThreshold: parseFloat(e.target.value) })}
+              disabled={!isBreathEnabled}
+              className="w-full accent-amber-400 h-1.5 bg-zinc-800 rounded-lg cursor-pointer disabled:opacity-40"
+            />
+            <span className="text-[10px] text-zinc-500 font-mono">Cutoff for full roar breath blast</span>
+          </div>
+        </div>
+
+        {/* Live Holographic Fire Particle Density Meter */}
+        <div className="p-3 bg-zinc-950 rounded-xl border border-zinc-800 flex items-center justify-between text-xs">
+          <div className="flex items-center gap-2">
+            <Activity className="w-4 h-4 text-amber-400 animate-pulse" />
+            <span className="text-zinc-400 font-mono text-[11px]">HOLOGRAPHIC FIRE DENSITY:</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-32 h-2.5 bg-zinc-800 rounded-full overflow-hidden">
+              <div
+                className="h-full bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 transition-all duration-75"
+                style={{
+                  width: `${Math.min(
+                    100,
+                    (audioState.volume || 0) * 100 * breathAudioGain * breathIntensity
+                  )}%`,
+                }}
+              />
+            </div>
+            <span className="font-mono text-amber-300 text-[11px] font-bold">
+              {Math.round(
+                Math.min(100, (audioState.volume || 0) * 100 * breathAudioGain * breathIntensity)
+              )}
+              %
             </span>
           </div>
         </div>

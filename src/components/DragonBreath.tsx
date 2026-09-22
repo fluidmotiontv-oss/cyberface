@@ -10,6 +10,7 @@ export interface DragonBreathProps {
   enabled?: boolean;
   intensityMultiplier?: number;
   roarThreshold?: number;
+  audioSyncGain?: number;
 }
 
 interface BreathParticle {
@@ -50,6 +51,7 @@ export const DragonBreath: React.FC<DragonBreathProps> = ({
   enabled = true,
   intensityMultiplier = 1.0,
   roarThreshold = 0.55,
+  audioSyncGain = 1.0,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const particlesRef = useRef<BreathParticle[]>([]);
@@ -70,6 +72,8 @@ export const DragonBreath: React.FC<DragonBreathProps> = ({
   enabledRef.current = enabled;
   const roarThresholdRef = useRef(roarThreshold);
   roarThresholdRef.current = roarThreshold;
+  const audioSyncGainRef = useRef(audioSyncGain);
+  audioSyncGainRef.current = audioSyncGain;
 
   const dynamicsRef = useRef({
     volume: 0,
@@ -121,8 +125,9 @@ export const DragonBreath: React.FC<DragonBreathProps> = ({
         return;
       }
 
-      const targetVol = Math.max(0, currentAudio.volume || 0);
-      const targetBass = Math.max(0, currentAudio.bass || 0);
+      const syncGain = audioSyncGainRef.current;
+      const targetVol = Math.max(0, (currentAudio.volume || 0) * syncGain);
+      const targetBass = Math.max(0, (currentAudio.bass || 0) * syncGain);
       const dyn = dynamicsRef.current;
       dyn.volume += (targetVol - dyn.volume) * 0.3;
       dyn.bass += (targetBass - dyn.bass) * 0.25;

@@ -204,6 +204,8 @@ export function CyberDragonAvatar({
                 lookY={lookPos.y}
                 enabled={true}
                 intensityMultiplier={streamConfig.dragonBreathIntensity ?? 1.0}
+                roarThreshold={streamConfig.dragonBreathRoarThreshold ?? 0.55}
+                audioSyncGain={streamConfig.dragonBreathAudioSyncGain ?? 1.2}
               />
             )}
 

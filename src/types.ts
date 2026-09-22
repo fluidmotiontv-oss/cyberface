@@ -90,6 +90,8 @@ export interface StreamConfig {
   wingbeatVisualizer?: boolean;
   showDragonBreath?: boolean;
   dragonBreathIntensity?: number;
+  dragonBreathRoarThreshold?: number;
+  dragonBreathAudioSyncGain?: number;
   flightMode?: AvatarFlightMode;
   flightPattern?: FlightPatternType;
   flightSpeed?: number;
@@ -148,4 +150,21 @@ export interface GestureItem {
   shortcutLabel: string;
   durationMs: number;
 }
+
+export interface MacroStep {
+  id: string;
+  gestureId: DragonGestureType;
+  delayMs: number;
+}
+
+export interface MacroSequence {
+  id: string;
+  name: string;
+  description: string;
+  steps: MacroStep[];
+  isLooping?: boolean;
+  isPreset?: boolean;
+  createdAt?: number;
+}
+
 
